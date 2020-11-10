@@ -3,6 +3,7 @@ package org.orcid.frontend.web.controllers;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URLDecoder;
 import java.util.UUID;
 
 import javax.annotation.Resource;
@@ -317,7 +318,24 @@ public class LoginController extends OauthControllerBase {
             } else {                
                 // Forward to account link page
                 if (Features.ORCID_ANGULAR_SIGNIN.isActive()) {
-                    view = new ModelAndView(new RedirectView(orcidUrlManager.getBaseUrl() +"/social-linking", true));
+
+                    if (Features.ORCID_ANGULAR_SIGNIN.isActive()) {
+                        if (request.getSession() != null
+                                && request.getSession().getAttribute(OauthHelper.REQUEST_INFO_FORM) != null) {
+                            RequestInfoForm requestInfoForm = new RequestInfoForm();
+                            try {
+                                requestInfoForm = oauthHelper.setUserRequestInfoForm(
+                                        (RequestInfoForm) request.getSession().getAttribute(OauthHelper.REQUEST_INFO_FORM));
+                                if (request.getSession().getAttribute(OrcidOauth2Constants.OAUTH_QUERY_STRING) != null) {
+                                    String url = URLDecoder.decode((String) request.getSession()
+                                            .getAttribute(OrcidOauth2Constants.OAUTH_QUERY_STRING), "UTF-8").trim();
+                                    view = new ModelAndView(
+                                            new RedirectView(orcidUrlManager.getBaseUrl() + "/social-linking", true));
+                                }
+                            } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+                            } catch (UnsupportedEncodingException e) {}
+                        }
+                    }
                 } else {
                     view = new ModelAndView(new RedirectView(orcidUrlManager.getBaseUrl() + "/social/access", true));
                 }     
