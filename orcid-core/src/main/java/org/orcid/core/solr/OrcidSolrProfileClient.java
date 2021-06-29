@@ -138,6 +138,7 @@ public class OrcidSolrProfileClient extends OrcidSolrClient {
                 orcidSolrResult.setGivenNames((String) solrDocument.getFieldValue(GIVEN_NAMES));
                 orcidSolrResult.setInstitutionAffiliationNames(getInstitutionAffiliationNames(solrDocument));
                 orcidSolrResult.setOtherNames(getStringList(solrDocument, OTHER_NAMES));
+                orcidSolrResult.setProfileLastModified(getDate(solrDocument, PROFILE_LAST_MODIFIED_DATE));
                 orcidSolrResultsList.add(orcidSolrResult);
             }
             orcidSolrResults.setNumFound(queryResponse.getResults().getNumFound());
@@ -166,5 +167,14 @@ public class OrcidSolrProfileClient extends OrcidSolrClient {
             }
         }
         return values;
+    }
+    
+    private Date getDate(SolrDocument solrDocument, String fieldName) {
+        if (solrDocument.getFieldValue(fieldName) != null) {
+            if (solrDocument.getFieldValue(fieldName) instanceof Date) {
+                return (Date) solrDocument.getFieldValue(fieldName);
+            }
+        }
+        return null;
     }
 }

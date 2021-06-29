@@ -2,6 +2,8 @@ package org.orcid.core.manager.v3.impl;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +18,10 @@ import org.orcid.core.manager.v3.OrcidSecurityManager;
 import org.orcid.core.manager.v3.read_only.RecordManagerReadOnly;
 import org.orcid.core.solr.CSVSolrClient;
 import org.orcid.core.solr.OrcidSolrProfileClient;
+import org.orcid.jaxb.model.v3.release.common.Day;
+import org.orcid.jaxb.model.v3.release.common.FuzzyDate;
+import org.orcid.jaxb.model.v3.release.common.Month;
+import org.orcid.jaxb.model.v3.release.common.Year;
 import org.orcid.jaxb.model.v3.release.search.Result;
 import org.orcid.jaxb.model.v3.release.search.Search;
 import org.orcid.jaxb.model.v3.release.search.expanded.ExpandedResult;
@@ -123,6 +129,16 @@ public class OrcidSearchManagerImpl implements OrcidSearchManager {
             result.setInstitutionNames(affiliations.toArray(new String[0]));
         }
 
+        if(solrResult.getProfileLastModified() != null) {
+            FuzzyDate fd = new FuzzyDate();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(solrResult.getProfileLastModified());
+            fd.setYear(new Year(cal.get(Calendar.YEAR)));
+            fd.setMonth(new Month(cal.get(Calendar.MONTH)));
+            fd.setDay(new Day(cal.get(Calendar.DAY_OF_MONTH)));
+            result.setLastModifiedDate(fd);
+        }
+        
         return result;
     }
 

@@ -1,6 +1,7 @@
 package org.orcid.utils.solr.entities;
 
 import java.util.Collection;
+import java.util.Date;
 
 public class OrcidSolrResult {
 
@@ -13,6 +14,7 @@ public class OrcidSolrResult {
     private String creditName;
     private Collection<String> otherNames;
     private String publicProfileMessage;
+    private Date profileLastModified;
 
     public String getOrcid() {
         return orcid;
@@ -84,6 +86,14 @@ public class OrcidSolrResult {
 
     public void setPublicProfileMessage(String publicProfileMessage) {
         this.publicProfileMessage = publicProfileMessage;
+    }
+
+    public Date getProfileLastModified() {
+        return profileLastModified;
+    }
+
+    public void setProfileLastModified(Date profileLastModified) {
+        this.profileLastModified = profileLastModified;
     }
 
 }

@@ -105,6 +105,6 @@ public class SolrConstants {
      **/
     public static final List<String> ALLOWED_FIELDS = Arrays.asList(SolrConstants.ORCID, SolrConstants.EMAIL_ADDRESS, SolrConstants.GIVEN_NAMES,
             SolrConstants.FAMILY_NAME, SolrConstants.GIVEN_AND_FAMILY_NAMES, SolrConstants.AFFILIATE_CURRENT_INSTITUTION_NAME,
-            SolrConstants.AFFILIATE_PAST_INSTITUTION_NAMES, SolrConstants.CREDIT_NAME, SolrConstants.OTHER_NAMES);
+            SolrConstants.AFFILIATE_PAST_INSTITUTION_NAMES, SolrConstants.CREDIT_NAME, SolrConstants.OTHER_NAMES, SolrConstants.PROFILE_LAST_MODIFIED_DATE);
 
 }
