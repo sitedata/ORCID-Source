@@ -92,12 +92,12 @@ public class OrcidRecordIndexerImpl implements OrcidRecordIndexer {
     
     @Override
     public void processProfilesWithPendingFlagAndAddToMessageQueue() {
-        this.processProfilesWithFlagAndAddToMessageQueue(IndexingStatus.PENDING);
+        this.processProfilesWithFlagAndAddToMessageQueue(IndexingStatus.PENDING);        
     }
 
     @Override
     public void processProfilesWithReindexFlagAndAddToMessageQueue() {
-        this.processProfilesWithFlagAndAddToMessageQueue(IndexingStatus.REINDEX);
+        this.processProfilesWithFlagAndAddToMessageQueue(IndexingStatus.REINDEX);        
     }
 
     @Override
@@ -250,11 +250,4 @@ public class OrcidRecordIndexerImpl implements OrcidRecordIndexer {
             }
         });
     }
-
-    @Override
-    public void processUnindexableRecords() {
-        Integer unindexableRecordsFound = profileDao.markUnindexableRecordsAsDone(indexingDelay);
-        LOG.info("Number of unindexable orcid ids found: " + unindexableRecordsFound);
-    }
-
 }

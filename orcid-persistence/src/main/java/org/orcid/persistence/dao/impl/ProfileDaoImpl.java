@@ -77,12 +77,10 @@ public class ProfileDaoImpl extends GenericDaoImpl<ProfileEntity, String> implem
     @Override
     public List<String> findOrcidsByIndexingStatus(IndexingStatus indexingStatus, int maxResults, Collection<String> orcidsToExclude, Integer delay) {                
         StringBuilder builder = new StringBuilder("SELECT p.orcid FROM profile p WHERE p.indexing_status = :indexingStatus ");
-        if(!IndexingStatus.FORCE_INDEXING.equals(indexingStatus)) {
-            builder.append(" AND (reviewed is true OR exists (SELECT 1 FROM oauth2_token_detail o WHERE p.orcid = o.user_orcid)) ");
-            if(delay != null && delay > 0) {
-                builder.append(" AND (p.last_indexed_date is null OR p.last_indexed_date < now() - INTERVAL '" + delay + " min') ");
-            }            
-        }
+        
+        if(delay != null && delay > 0) {
+            builder.append(" AND (p.last_indexed_date is null OR p.last_indexed_date < now() - INTERVAL '" + delay + " min') ");
+        }            
         if (!orcidsToExclude.isEmpty()) {
             builder.append(" AND p.orcid NOT IN :orcidsToExclude");
         }
