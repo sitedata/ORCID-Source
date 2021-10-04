@@ -21,6 +21,7 @@ import org.orcid.core.manager.InternalSSOManager;
 import org.orcid.core.manager.ProfileEntityCacheManager;
 import org.orcid.core.manager.StatusManager;
 import org.orcid.core.manager.impl.StatisticsCacheManager;
+import org.orcid.core.manager.v3.OrcidSecurityManager;
 import org.orcid.core.manager.v3.ProfileEntityManager;
 import org.orcid.core.oauth.OrcidProfileUserDetails;
 import org.orcid.core.security.OrcidWebRole;
@@ -76,7 +77,10 @@ public class HomeController extends BaseController {
     
     @Value("${org.orcid.frontend.web.maintenanceHeaderUrl:}")
     private URL maintenanceHeaderUrl;
-    
+
+    @Resource(name = "orcidSecurityManagerV3")
+    protected OrcidSecurityManager orcidSecurityManager;
+
     @Resource
     private LocaleManager localeManager;
     
@@ -251,7 +255,10 @@ public class HomeController extends BaseController {
             }
             if(!PojoUtil.isEmpty(p.getGroupType())) {
                 info.put("MEMBER_TYPE", p.getGroupType());
-            }            
+            }    
+            if (orcidSecurityManager.isPasswordConfirmationRequired()) {
+                info.put("DELEGATOR_MODO", String.valueOf(true));
+            }   
         }
         return info;
     }
