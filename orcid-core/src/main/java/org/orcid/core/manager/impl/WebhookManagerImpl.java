@@ -52,6 +52,7 @@ public class WebhookManagerImpl implements WebhookManager {
     private Object mainWebhooksLock = new Object();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebhookManagerImpl.class);
+    private static final Logger WEBHOOK_LOGGER = LoggerFactory.getLogger(WebhookManagerImpl.class.getName() + ".logger");
     private static final int WEBHOOKS_BATCH_SIZE = 1000;
 
     public void setMaxJobsPerClient(int maxJobs) {
@@ -176,7 +177,11 @@ public class WebhookManagerImpl implements WebhookManager {
         LOGGER.info("Processing webhook {} for Client: {} With ORCID: {}", new Object[] { webhook.getUri(), clientId, orcid });
         // Execute the request and get the client response
         try {
+            long startTime = System.currentTimeMillis();
             int statusCode = doPost(uri);
+            String elapsedTime = Double.toString((System.currentTimeMillis() - startTime) / 1000.);
+            WEBHOOK_LOGGER.info("Webhook {} for Client: {} With ORCID: {} has been processed in {} seconds with code {}",
+                    new Object[] { webhook.getUri(), clientId, orcid, elapsedTime, Integer.toString(statusCode) });
             if (statusCode >= 200 && statusCode < 300) {
                 LOGGER.debug("Webhook {} for Client: {} With ORCID: {} has been processed", new Object[] { webhook.getUri(), clientId, orcid });
                 webhook.setLastSent(new Date());
